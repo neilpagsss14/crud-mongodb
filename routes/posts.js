@@ -19,7 +19,8 @@ app.post("/api/students", async (req, res) => {
   }
 });
 
-app.get("/api/students", async (req, res) => {
+//disp all stud
+app.get("/api/students/post", async (req, res) => {
   try {
     const students = await Students.find({});
     res.status(200).json(students);
@@ -30,6 +31,7 @@ app.get("/api/students", async (req, res) => {
   }
 });
 
+//find stud by id
 app.get("/api/students/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -47,9 +49,9 @@ app.get("/api/students/:id", async (req, res) => {
   }
 });
 
-app.put("/api/students/:id", async (req, res) => {
+//update stud by id
+app.put("/api/students/update/:id", async (req, res) => {
   try {
-    const { id } = req.params;
     const student = await Student.findByIdAndUpdate(id, req.body);
     if (!student) {
       return res.status(404).json({ message: "Student not found." });
@@ -62,21 +64,20 @@ app.put("/api/students/:id", async (req, res) => {
   }
 });
 
-// app.delete("/post/delete/:id", async (req, res) => {
-//   try {
-//     const deletedPost = await Posts.findByIdAndRemove(req.params.id).exec();
-//     if (!deletedPost) {
-//       return res.status(404).json({ message: "Post not found" });
-//     }
-//     return res.status(200).json({
-//       message: "Deleted successfully",
-//       deletedPost,
-//     });
-//   } catch (error) {
-//     return res.status(400).json({
-//       error: error.message,
-//     });
-//   }
-// });
+app.delete("/api/students/:id", async (req, res) => {
+  try {
+    const student = await Student.findByIdAndDelete(req.params.id);
+    if (!student) {
+      return res.status(404).json({ message: "Student not found" });
+    }
+    return res.status(200).json({
+      message: "Deleted successfully",
+    });
+  } catch (error) {
+    res.status(400).json({
+      error: error.message,
+    });
+  }
+});
 
 module.exports = app;
